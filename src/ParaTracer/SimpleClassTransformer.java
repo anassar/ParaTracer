@@ -10,7 +10,6 @@ import javassist.CtClass;
 import javassist.CtMethod;
 
 
-
 /**
  * Once a transformer has been registered with <code>addTransformer</code>,
  * the transformer will be called for every new class definition and every
@@ -70,11 +69,12 @@ public class SimpleClassTransformer implements ClassFileTransformer {
 				normalizedClassName.startsWith( "java."  ) ||
 				normalizedClassName.startsWith( "javax." );
 		if ( onlyListClasses && ( stdClass || !onlyStdClasses ) ) {
+			/**
 			// Use standard out because System.err is the stream used to log method calls.
-//			System.out.println( "---- Instrumenting: " + className );
-//			Logger.println( "---- Instrumenting: " + className );
-
-//			System.out.println( "\tNormalized: " + normalizedClassName );
+			System.out.println( "---- Instrumenting: " + className );
+			Logger.println( "---- Instrumenting: " + className );
+			System.out.println( "\tNormalized: " + normalizedClassName );
+			 */
 			Logger.println( normalizedClassName );
 			return null; // No modifications.
 		}
@@ -92,39 +92,44 @@ public class SimpleClassTransformer implements ClassFileTransformer {
 			}
 			if ( !found ) return null;
 		}
-		// To manipulate raw byte code, rely on dedicated tools such as ASM or Javassist.
+		// To manipulate raw byte code, rely on dedicated tools
+		// such as ASM or Javassist.
 		byte[] byteCode = classfileBuffer;
 
-		ClassMonitorSet classMonitorSet = ClassMonitorSet.isMonitoredClass( normalizedClassName );
+		ClassMonitorSet classMonitorSet =
+				ClassMonitorSet.isMonitoredClass( normalizedClassName );
 		if ( classMonitorSet != null ) {
-//			System.out.println( "----- Monitoring: " + normalizedClassName );
-//			Logger.println( "----- Monitoring: " + normalizedClassName );
+//			System.out.println( "----- Monitoring: " +
+//				normalizedClassName );
+//			Logger.println( "----- Monitoring: " +
+//				normalizedClassName );
 			try {
-				// The ClassPool object reads a class file on demand for constructing
-				// a CtClass object and records the constructed object for responding
-				// to later accesses.
+				// The ClassPool object reads a class file on demand for
+				// constructing a CtClass object and records the
+				// constructed object for responding to later accesses.
 				// The ClassPool object returned by getDefault() searches
 				// the default system search path.
 				ClassPool cp = ClassPool.getDefault();
 //         		cp.insertClassPath("/usr/local/javalib");
-
 //				cp.importPackage( "Logging.Logger");
 
-				// Compile-time class - an abstract representation of a class file.
+				// Compile-time class - an abstract representation of
+				// a class file.
 				CtClass cc = cp.get( normalizedClassName );
 
-//				CtMethod[]  methods  = cc.getDeclaredMethods(); // The inherited methods are not included.
+//				CtMethod[]  methods  = cc.getDeclaredMethods(); // Inherited methods are not included.
 				CtMethod[]  methods  = cc.getMethods();
 				for( CtMethod method : methods ) {
 //					Logger.println( "\t~~~~ Checking Method: " + method.getLongName() );
-					if ( ! classMonitorSet.isMonitoredMethod( method ) ) continue;
+					if ( ! classMonitorSet.isMonitoredMethod( method ) )
+						continue;
 //					System.out.println( "\t~~~~ Monitoring Method: " + method.getLongName() );
 //					Logger.println( "\t~~~~ Monitoring Method: " + method.getLongName() );
 
 					StringBuilder sbs = new StringBuilder();
 					sbs.append( "long tid = Thread.currentThread().getId();" );
 					sbs.append( "StringBuilder sbArgs = new StringBuilder();" );
-					sbs.append( "sbArgs.append( System.identityHashCode( $0 ) );" );
+					sbs.append( "sbArgs.append( System.identityHashCode( $0 ) );" ); // The "this" reference.
 					CtClass[] pTypes = method.getParameterTypes();
 					for( int i=0; i < pTypes.length; ++i ) {
 						CtClass pType = pTypes[i];
@@ -150,7 +155,7 @@ public class SimpleClassTransformer implements ClassFileTransformer {
 //					sbs.append( "} catch (java.io.IOException e) {" );
 //					sbs.append( "	e.printStackTrace();" );
 //					sbs.append( "}" );
-  	
+
 					// You need to catch CannotCompileExceptions here because
 					// some methods might have no body which throws that exception.
 					// If not caught here, the rest of the class will be bypassed
@@ -170,7 +175,7 @@ public class SimpleClassTransformer implements ClassFileTransformer {
 					sbe.append( "sb.append( tid + \" : " + method.getLongName() + ".< END >(\" );" );
 					sbe.append( "sb.append( args );" );
 					sbe.append( "sb.append( \")\" );" );
-			
+
 					CtClass rType = method.getReturnType();
 					if ( rType.equals( CtClass.voidType ) ) {
 						sbe.append( "sb.append( \"=VOID\" );" );
@@ -179,7 +184,6 @@ public class SimpleClassTransformer implements ClassFileTransformer {
 					} else {
 						sbe.append( "sb.append( \"=\" + System.identityHashCode( $_ ) );" );
 					}
-
 
 					sbe.append( "Logging.Logger.println( sb.toString() );" );
 //					sbe.append( "System.err.println( sb.toString() );" );
@@ -193,15 +197,63 @@ public class SimpleClassTransformer implements ClassFileTransformer {
 //					sbe.append( "	e.printStackTrace();" );
 //					sbe.append( "}" );
 
-					// You need to catch CannotCompileExceptions here because
-					// some methods might have no body which throws that exception.
-					// If not caught here, the rest of the class will be bypassed
-					// without instrumentation.
+					/** You need to catch CannotCompileExceptions here
+					 * because some methods might have no body which
+					 * throws that exception. If not caught here, the
+					 * rest of the class will be bypassed
+					 * without instrumentation.
+					 */
 					try {
-						method.insertAfter("{" + sbe.toString() + "}");
+						/**
+						 * Although the compiled code inserted by
+						 * insertAfter() is executed just before the
+						 * control normally returns from the method,
+						 * it can be also executed when an exception
+						 * is thrown from the method. To execute it
+						 * when an exception is thrown, the second
+						 * parameter asFinally to insertAfter() must
+						 * be true.
+						 * If an exception is thrown, the compiled code
+						 * inserted by insertAfter() is executed as
+						 * a finally clause. The value of $_ is 0 or null
+						 * in the compiled code. After the execution of
+						 * the compiled code terminates, the exception
+						 * originally thrown is re-thrown to the caller.
+						 * Note that the value of $_ is never thrown to
+						 * the caller; it is rather discarded.
+						 * 
+						 * THIS IS IMPORTANT, since we store argument
+						 * values on the stack. An exception unwinds the
+						 * main program stack, but we need also to unwind
+						 * the instrumentation stack.
+						 */
+						method.insertAfter(
+								"{" + sbe.toString() + "}", true );
 					} catch ( Exception ex ) {
 						System.err.println( ex.toString() );
 					}
+					/**
+					 * addCatch() inserts a code fragment into a method
+					 * body so that the code fragment is executed when
+					 * the method body throws an exception and the
+					 * control returns to the caller. In the source
+					 * text representing the inserted code fragment,
+					 * the exception value is referred to with the
+					 * special variable $e.
+					 */
+					CtClass eType =
+							cp.get("java.lang.Exception");
+					method.addCatch(
+							"{ Logging.Logger.println("
+							+ "\"*** Exception: \" + $e.getClass().getName());"
+							+ " throw $e; }",
+							eType );
+					eType = cp.get("java.lang.Error");
+					method.addCatch(
+							"{ Logging.Logger.println("
+							+ "\"*** Error: \" + $e.getClass().getName());"
+							+ " throw $e; }",
+							eType );
 				}
 
 				/**

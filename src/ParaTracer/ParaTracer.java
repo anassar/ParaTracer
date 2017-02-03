@@ -11,50 +11,8 @@ import javassist.CtNewConstructor;
 import javassist.CtNewMethod;
 
 
-
 /**
- ***************************************************************************************
- * Running DaCapo Benchmarks:
- * # cd E:\Dropbox\SIMM\MiningSpecs\ParaTracer\DaCapo Benchmark Suite
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListXalan      -jar dacapo-9.12-bach.jar xalan
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListAvrora     -jar dacapo-9.12-bach.jar avrora
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListBatik      -jar dacapo-9.12-bach.jar batik
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListEclipse    -jar dacapo-9.12-bach.jar eclipse
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListFop        -jar dacapo-9.12-bach.jar fop
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListH2         -jar dacapo-9.12-bach.jar h2
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListJython     -jar dacapo-9.12-bach.jar jython
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListLuIndex    -jar dacapo-9.12-bach.jar luindex
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListLuSearch   -jar dacapo-9.12-bach.jar lusearch
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListPmd        -jar dacapo-9.12-bach.jar pmd
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListSunflow    -jar dacapo-9.12-bach.jar sunflow
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListTomcat     -jar dacapo-9.12-bach.jar tomcat
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListTradeBeans -jar dacapo-9.12-bach.jar tradebeans
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListTradeSoap  -jar dacapo-9.12-bach.jar tradesoap
- ***************************************************************************************
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesXalan      -jar dacapo-9.12-bach.jar xalan
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesAvrora     -jar dacapo-9.12-bach.jar avrora
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesBatik      -jar dacapo-9.12-bach.jar batik
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesEclipse    -jar dacapo-9.12-bach.jar eclipse
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesFop        -jar dacapo-9.12-bach.jar fop
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesH2         -jar dacapo-9.12-bach.jar h2
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesJython     -jar dacapo-9.12-bach.jar jython
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesLuIndex    -jar dacapo-9.12-bach.jar luindex
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesLuSearch   -jar dacapo-9.12-bach.jar lusearch
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesPmd        -jar dacapo-9.12-bach.jar pmd
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesSunflow    -jar dacapo-9.12-bach.jar sunflow
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesTomcat     -jar dacapo-9.12-bach.jar tomcat
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesTradeBeans -jar dacapo-9.12-bach.jar tradebeans
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesTradeSoap  -jar dacapo-9.12-bach.jar tradesoap
-
-
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceXalan,java.util.HashMap,java.util.LinkedHashMap,java.util.IdentityHashMap -jar dacapo-9.12-bach.jar xalan
-java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceTradeSoap,java.net  -jar dacapo-9.12-bach.jar tradesoap
- ***************************************************************************************
- */
-
-
-/**
- * See: https://docs.oracle.com/javase/7/docs/api/java/lang/instrument/package-summary.html
+ * See: <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/instrument/package-summary.html">Instrument Package Summary</a>
  * <p>An agent is deployed as a JAR file. An attribute in the JAR file manifest
  * specifies the agent class which will be loaded to start the agent.
  * On implementations with a command-line interface, an agent is started by
@@ -68,6 +26,59 @@ java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=Event
  * 
  * <p>The manifest of the agent JAR file must contain the attribute Premain-Class.
  * The value of this attribute is the name of the agent class.</p>
+ * 
+ * Note that according to this 
+ * <a href="http://stackoverflow.com/questions/29451704/using-javassist-to-log-method-calls-and-argument-values-how-to-make-a-logger-cl">StackOverflow answer</a>,
+ * we need to make the {@code Logging.Logger} class available to the
+ * bootstrap classloader. That is why we move the {@code Logger} class
+ * into a separate JAR file, and list that file in the {@code Boot-Class-Path}
+ * attribute of the {@code ParaTracer} agent JAR MANIFEST.MF file:
+ * <p>{@code Boot-Class-Path: ParaTracerLogger.jar  libs/javassist/javassist.jar}</p>
+ * This way, the {@code Logger} class is visible to the bootstrap loader
+ * and can be seen by all the instrumented classes.
+ * 
+ * <p> Note that we also add this line to the {@code ParaTracer} agent
+ * JAR MANIFEST.MF file:</p>
+ * <p>{@code Premain-Class: ParaTracer.ParaTracer}</p>
+ * 
+ ***************************************************************************************
+ * <p><b>Running DaCapo Benchmarks:</b></p>
+ * <p>{@code cd E:\Dropbox\SIMM\MiningSpecs\ParaTracer\DaCapo Benchmark Suite}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListXalan      -jar dacapo-9.12-bach.jar xalan}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListAvrora     -jar dacapo-9.12-bach.jar avrora}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListBatik      -jar dacapo-9.12-bach.jar batik}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListEclipse    -jar dacapo-9.12-bach.jar eclipse}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListFop        -jar dacapo-9.12-bach.jar fop}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListH2         -jar dacapo-9.12-bach.jar h2}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListJython     -jar dacapo-9.12-bach.jar jython}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListLuIndex    -jar dacapo-9.12-bach.jar luindex}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListLuSearch   -jar dacapo-9.12-bach.jar lusearch}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListPmd        -jar dacapo-9.12-bach.jar pmd}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListSunflow    -jar dacapo-9.12-bach.jar sunflow}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListTomcat     -jar dacapo-9.12-bach.jar tomcat}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListTradeBeans -jar dacapo-9.12-bach.jar tradebeans}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=OnlyListClasses,OnlyStdClasses,ClassListTradeSoap  -jar dacapo-9.12-bach.jar tradesoap}</p>
+ ****************************************************************************************
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesXalan      -jar dacapo-9.12-bach.jar xalan}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesAvrora     -jar dacapo-9.12-bach.jar avrora}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesBatik      -jar dacapo-9.12-bach.jar batik}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesEclipse    -jar dacapo-9.12-bach.jar eclipse}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesFop        -jar dacapo-9.12-bach.jar fop}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesH2         -jar dacapo-9.12-bach.jar h2}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesJython     -jar dacapo-9.12-bach.jar jython}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesLuIndex    -jar dacapo-9.12-bach.jar luindex}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesLuSearch   -jar dacapo-9.12-bach.jar lusearch}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesPmd        -jar dacapo-9.12-bach.jar pmd}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesSunflow    -jar dacapo-9.12-bach.jar sunflow}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesTomcat     -jar dacapo-9.12-bach.jar tomcat}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesTradeBeans -jar dacapo-9.12-bach.jar tradebeans}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceAllClassesTradeSoap  -jar dacapo-9.12-bach.jar tradesoap}</p>
+ * 
+ ****************************************************************************************
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceXalan,java.util.HashMap,java.util.LinkedHashMap,java.util.IdentityHashMap -jar dacapo-9.12-bach.jar xalan}</p>
+ * <p>{@code java -javaagent:E:\Dropbox\SIMM\MiningSpecs\ParaTracer\ParaTracerAgent.jar=EventTraceTradeSoap,java.net  -jar dacapo-9.12-bach.jar tradesoap}</p>
+ ****************************************************************************************
+ * 
  * @author Ahmed Nassar
  *
  */
@@ -94,9 +105,9 @@ public class ParaTracer {
 		instr = inst;
 		String[] args = agentArgs.split( "," );
 		for( String arg : args ) {
-			if ( "OnlyListClasses".equals( arg ) ) {
+			if ( "OnlyListClasses".equalsIgnoreCase( arg ) ) {
 				onlyListClasses = true;
-			} else if ( "OnlyStdClasses".equals( arg ) ) {
+			} else if ( "OnlyStdClasses".equalsIgnoreCase( arg ) ) {
 				onlyStdClasses = true;
 			} else if ( arg.startsWith( "java." ) ) {
 				addPackage( arg );

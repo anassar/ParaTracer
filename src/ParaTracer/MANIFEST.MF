@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Premain-Class: ParaTracer.ParaTracer
+Boot-Class-Path: ParaTracerLogger.jar  libs/javassist/javassist.jar
